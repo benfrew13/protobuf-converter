@@ -203,6 +203,7 @@ public final class Converter {
 				if (FieldUtils.isComplexType(collectionType)) {
 					mappedValue = createDomainValueList(collectionType, mappedValue);
 				}
+			case MAP_MAPPING:
 			case MAPPED:
 			default:
 				fieldWriter.write(fieldResolver, mappedValue);
@@ -318,6 +319,7 @@ public final class Converter {
 					mappedValue = createProtobufValueList(protobufCollectionClass, field.getType(),
 							(Collection) mappedValue);
 				}
+			case MAP_MAPPING:
 			case MAPPED:
 			default:
 				fieldWriter.write(fieldResolver, mappedValue);
