@@ -52,6 +52,13 @@ public interface FieldResolver {
 	String getProtobufName();
 
 	/**
+	 * Getter for protobuf type.
+	 * 
+	 * @return the type of object to be passed to the protobuf getter/setters.
+	 */
+	Class<?> getProtobufType();
+	
+	/**
 	 * Getter for field type converter.
 	 *
 	 * @return instance of field type converter.
