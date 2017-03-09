@@ -6,3 +6,10 @@
 /example/.idea
 /example/.gradle
 /example/build
+/bin/
+
+
+# Eclipse Project files
+.classpath
+.project
+.settings
