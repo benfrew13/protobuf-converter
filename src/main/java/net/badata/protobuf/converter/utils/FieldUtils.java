@@ -24,6 +24,7 @@ import net.badata.protobuf.converter.resolver.FieldResolver;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by jsjem on 25.04.2016.
@@ -36,6 +37,8 @@ public final class FieldUtils {
 	private static final String BOOLEAN_GETTER_PREFIX = "is";
 	private static final String PROTOBUF_LIST_GETTER_POSTFIX = "List";
 	private static final String PROTOBUF_LIST_SETTER_PREFIX = "addAll";
+	private static final String PROTOBUF_MAP_GETTER_POSTFIX = "Map";
+	private static final String PROTOBUF_MAP_GETTER_PREFIX = "putAll";
 	private static final String PROTOBUF_NESTED_BUILDER_POSTFIX = "Builder";
 
 
@@ -70,6 +73,16 @@ public final class FieldUtils {
 	public static boolean isCollectionType(final Field field) {
 		return Collection.class.isAssignableFrom(field.getType());
 	}
+	
+	/**
+	 * Check whether field type implements Map interface.
+	 * 
+	 * @param field Testing field.
+	 * @return true if field type implements {@link java.util.Map}, otherwise false.
+	 */
+	public static boolean isMapType(final Field field) {
+		return Map.class.isAssignableFrom(field.getType());
+	}
 
 	/**
 	 * Create protobuf getter name for domain field.
@@ -81,6 +94,9 @@ public final class FieldUtils {
 		String getterName = StringUtils.createMethodName(GETTER_PREFIX, fieldResolver.getProtobufName());
 		if (isCollectionType(fieldResolver.getField())) {
 			return getterName + PROTOBUF_LIST_GETTER_POSTFIX;
+		}
+		else if (isMapType(fieldResolver.getField())) {
+			return getterName + PROTOBUF_MAP_GETTER_POSTFIX;
 		}
 		return getterName;
 	}
@@ -94,6 +110,9 @@ public final class FieldUtils {
 	public static String createProtobufSetterName(final FieldResolver fieldResolver) {
 		if (isCollectionType(fieldResolver.getField())) {
 			return StringUtils.createMethodName(PROTOBUF_LIST_SETTER_PREFIX, fieldResolver.getProtobufName());
+		}
+		else if (isMapType(fieldResolver.getField())) {
+			return StringUtils.createMethodName(PROTOBUF_MAP_GETTER_PREFIX, fieldResolver.getProtobufName());
 		}
 		return StringUtils.createMethodName(SETTER_PREFIX, fieldResolver.getProtobufName());
 	}
