@@ -36,6 +36,7 @@ public class DefaultFieldResolverImpl implements FieldResolver {
 	private final Field field;
 	private String domainName;
 	private String protobufName;
+	private Class<?> protobufType;
 	private TypeConverter<?, ?> converter;
 	private NullValueInspector nullValueInspector;
 	private DefaultValue defaultValue;
@@ -50,6 +51,7 @@ public class DefaultFieldResolverImpl implements FieldResolver {
 		this.field = field;
 		this.domainName = field.getName();
 		this.protobufName = field.getName();
+		this.protobufType = field.getType();
 		this.converter = new DefaultConverterImpl();
 		this.nullValueInspector = new DefaultNullValueInspectorImpl();
 		this.defaultValue = new SimpleDefaultValueImpl();
@@ -79,6 +81,10 @@ public class DefaultFieldResolverImpl implements FieldResolver {
 		return protobufName;
 	}
 
+	public Class<?> getProtobufType() {
+		return protobufType;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -105,6 +111,10 @@ public class DefaultFieldResolverImpl implements FieldResolver {
 
 	public void setProtobufName(final String protobufName) {
 		this.protobufName = protobufName;
+	}
+	
+	public void setProtobufType(Class<?> protobufType) {
+		this.protobufType = protobufType;
 	}
 
 	public void setConverter(final TypeConverter<?, ?> converter) {

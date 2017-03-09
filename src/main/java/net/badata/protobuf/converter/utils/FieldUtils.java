@@ -70,6 +70,16 @@ public final class FieldUtils {
 	public static boolean isCollectionType(final Field field) {
 		return Collection.class.isAssignableFrom(field.getType());
 	}
+	
+	/**
+	 * Check whether field type implements Collection interface.
+	 *
+	 * @param type Testing type.
+	 * @return true if type implements {@link java.util.Collection}, otherwise false.
+	 */
+	public static boolean isCollectionType(final Class<?> type) {
+		return Collection.class.isAssignableFrom(type);
+	}
 
 	/**
 	 * Create protobuf getter name for domain field.
@@ -79,7 +89,7 @@ public final class FieldUtils {
 	 */
 	public static String createProtobufGetterName(final FieldResolver fieldResolver) {
 		String getterName = StringUtils.createMethodName(GETTER_PREFIX, fieldResolver.getProtobufName());
-		if (isCollectionType(fieldResolver.getField())) {
+		if (isCollectionType(fieldResolver.getProtobufType())) {
 			return getterName + PROTOBUF_LIST_GETTER_POSTFIX;
 		}
 		return getterName;
@@ -92,7 +102,7 @@ public final class FieldUtils {
 	 * @return Protobuf field setter name.
 	 */
 	public static String createProtobufSetterName(final FieldResolver fieldResolver) {
-		if (isCollectionType(fieldResolver.getField())) {
+		if (isCollectionType(fieldResolver.getProtobufType())) {
 			return StringUtils.createMethodName(PROTOBUF_LIST_SETTER_PREFIX, fieldResolver.getProtobufName());
 		}
 		return StringUtils.createMethodName(SETTER_PREFIX, fieldResolver.getProtobufName());

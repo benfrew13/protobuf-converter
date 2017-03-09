@@ -20,6 +20,7 @@ package net.badata.protobuf.converter.resolver;
 import net.badata.protobuf.converter.annotation.ProtoField;
 import net.badata.protobuf.converter.exception.ConverterException;
 import net.badata.protobuf.converter.exception.WriteException;
+import net.badata.protobuf.converter.type.DefaultConverterImpl;
 import net.badata.protobuf.converter.utils.AnnotationUtils;
 
 import java.lang.reflect.Field;
@@ -45,10 +46,15 @@ public class AnnotatedFieldResolverFactoryImpl implements FieldResolverFactory {
 				fieldResolver.setProtobufName(protoField.name());
 			}
 			try {
+				// if a custom converter is specified, note its return type, otherwise the domain type is assumed
+				if(!DefaultConverterImpl.class.equals(protoField.converter())) {
+					Class<?> converterOutputClass = protoField.converter().getMethod("toProtobufValue", Object.class).getReturnType();
+					fieldResolver.setProtobufType(converterOutputClass);
+				}
 				fieldResolver.setConverter(AnnotationUtils.createTypeConverter(protoField));
 				fieldResolver.setNullValueInspector(AnnotationUtils.createNullValueInspector(protoField));
 				fieldResolver.setDefaultValue(AnnotationUtils.createDefaultValue(protoField));
-			} catch (WriteException e) {
+			} catch (WriteException | NoSuchMethodException | SecurityException e) {
 				throw new ConverterException("Can't create field resolver", e);
 			}
 		}
